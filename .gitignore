@@ -1,3 +1,6 @@
 .vscode
 pca
+testcases/*
+testcases/
+sample_jacobi
 

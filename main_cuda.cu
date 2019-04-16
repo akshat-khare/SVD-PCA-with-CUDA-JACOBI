@@ -51,11 +51,11 @@ int main(int argc, char const *argv[])
 	*/
 	read_matrix (argv[1], &M, &N, &D);
 
-	cudaEvent_t start, stop;
-	cudaEventCreate(&start);
-	cudaEventCreate(&stop);
+	// cudaEvent_t start, stop;
+	// cudaEventCreate(&start);
+	// cudaEventCreate(&stop);
 
-	cudaEventRecord(start);
+	// cudaEventRecord(start);
 	
 	// /*
 	// 	*****************************************************
@@ -64,9 +64,9 @@ int main(int argc, char const *argv[])
 	// */
 	SVD_and_PCA(M, N, D, &U, &SIGMA, &V_T, &SIGMAm, &SIGMAn, &D_HAT, &K, retention);
 
-	cudaEventRecord(stop);
-	cudaEventSynchronize(stop);
-	cudaEventElapsedTime(&computation_time, start, stop);
+	// cudaEventRecord(stop);
+	// cudaEventSynchronize(stop);
+	// cudaEventElapsedTime(&computation_time, start, stop);
 	
 	/*
 		--Pre-defined functions --
