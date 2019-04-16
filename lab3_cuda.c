@@ -362,10 +362,17 @@ void SVDori(int M, int N, double* D, double** U, double** SIGMA, double** V_T){
     printMatrix(M,M,&V);
     printf("sigma is\n");
     printMatrix(N,M,&sigmamatrix);
-    printf("M is\n");
-    printMatrix(N,M,&D_T);
     printf("sigmainv is\n");
     printMatrix(M,N,&sigmainvmatrix);
+    printf("M is\n");
+    printMatrix(N,M,&D_T);
+
+    double * tempmult2 = (double *)malloc(sizeof(double)*N*M);
+    double * tempmult3 = (double *)malloc(sizeof(double)*N*M);
+    statusmultiply = multiply(N,N,*U,N,M,sigmamatrix,&tempmult2);
+    statusmultiply = multiply(N,M,tempmult2,M,M,*V_T,&tempmult3);
+    printf("usigv_t is \n");
+    printMatrix(N,M,&tempmult3);
     
 }
 void PCA(int retention, int M, int N, double* D, double* U, double* SIGMA, double** D_HAT, int *K)
