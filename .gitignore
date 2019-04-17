@@ -3,4 +3,7 @@ pca
 testcases/*
 testcases/
 sample_jacobi
+*.exe
+*.lib
+*.exp
 

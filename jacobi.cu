@@ -30,9 +30,9 @@ void read_file(char* filename, int num_samples, int num_features, double** A) {
 
 double** mat_transpose(double** A, int Am, int An) {
     double **B;
-    B = (double**)malloc(__SIZEOF_POINTER__*An);
+    B = (double**)malloc(sizeof(double *)*An);
     for (int i=0; i<An; i++)
-        B[i] = (double*)malloc(__SIZEOF_DOUBLE__*Am);
+        B[i] = (double*)malloc(sizeof(double)*Am);
 
     for (int i=0; i<Am; i++){
         for (int j=0; j<An; j++){
@@ -46,9 +46,9 @@ double** mat_transpose(double** A, int Am, int An) {
 double** mat_mul(double** A, int Am, int An, 
                  double** B, int Bm, int Bn){
     double **C;
-    C = (double**)malloc(__SIZEOF_POINTER__*Am);
+    C = (double**)malloc(sizeof(double *)*Am);
     for (int i=0; i<Am; i++)
-        C[i] = (double*)malloc(__SIZEOF_DOUBLE__*Bn);
+        C[i] = (double*)malloc(sizeof(double)*Bn);
 
     for (int i=0; i<Am; i++){
         for (int j=0; j<Bn; j++){
@@ -96,15 +96,15 @@ void rotate(int k, int l, int i, int j, double c, double s,
     double** mat2;
     double** mat3;
 
-    mat1 = (double**)malloc(__SIZEOF_POINTER__*2);
-    mat1[0] = (double*)malloc(__SIZEOF_DOUBLE__*2);
-    mat1[1] = (double*)malloc(__SIZEOF_DOUBLE__*2);
+    mat1 = (double**)malloc(sizeof(double *)*2);
+    mat1[0] = (double*)malloc(sizeof(double)*2);
+    mat1[1] = (double*)malloc(sizeof(double)*2);
     mat1[0][0] = c; mat1[0][1] = -s;
     mat1[1][0] = s; mat1[1][1] = c;
 
-    mat2 = (double**)malloc(__SIZEOF_POINTER__*2);
-    mat2[0] = (double*)malloc(__SIZEOF_DOUBLE__*1);
-    mat2[1] = (double*)malloc(__SIZEOF_DOUBLE__*1);
+    mat2 = (double**)malloc(sizeof(double *)*2);
+    mat2[0] = (double*)malloc(sizeof(double)*1);
+    mat2[1] = (double*)malloc(sizeof(double)*1);
     if (eigenvectors){
         mat2[0][0] = E[i][k];
         mat2[1][0] = E[i][l];
@@ -159,9 +159,9 @@ void print_vector(double* A, int An) {
 }
 
 void init_jacobi() {
-    E = (double**)malloc(__SIZEOF_POINTER__*N_jacobi);
+    E = (double**)malloc(sizeof(double *)*N_jacobi);
     for (int i=0; i<N_jacobi; i++){
-        E[i] = (double*)malloc(__SIZEOF_DOUBLE__*N_jacobi);
+        E[i] = (double*)malloc(sizeof(double)*N_jacobi);
         for (int j=0; j<N_jacobi; j++){
             E[i][j] = 0;
         }
@@ -170,8 +170,8 @@ void init_jacobi() {
 
     state = N_jacobi;
 
-    e = (double*)malloc(__SIZEOF_DOUBLE__*N_jacobi);
-    ind = (int*)malloc(__SIZEOF_INT__*N_jacobi);
+    e = (double*)malloc(sizeof(double)*N_jacobi);
+    ind = (int*)malloc(sizeof(int)*N_jacobi);
     changed = (bool*)malloc(sizeof(bool)*N_jacobi);
 
     for (int k=0; k<N_jacobi; k++){
