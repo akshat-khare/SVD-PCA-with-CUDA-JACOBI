@@ -11,11 +11,11 @@
 // #include <assert.h>
 
 // #define BLOCK_SIZE 16
-
+#define USEGPU 1
 
 
 int debug =1;
-int debug2 = 1;
+int debug2 = 0;
 int labid=3;
 // int NUMTHREADS= 1;
 int maxloops= 100000;
@@ -95,23 +95,90 @@ __global__ void gpu_matrix_mult(double *a,double *b, double *c, int m, int n, in
         c[row * k + col] = sum;
     }
 } 
+int multiplycpu(int adim1, int adim2, double * a, int bdim1,int bdim2, double * b, double ** c){
+    
+        if(adim2!=bdim1){
+            return -1;
+        }
+        // #pragma omp parallel for collapse(2)
+
+            for(int i1=0;i1<adim1;i1++){
+                for(int j1=0;j1<bdim2;j1++){
+                    double temp=0.0;
+                    for(int i2=0;i2<adim2;i2++){
+                        temp += (a[adim2*i1+i2])*(b[bdim2*i2+ j1]);
+                    }
+                    (*c)[bdim2*i1+j1]=temp;
+                }
+            }
+        return 0;        
+    
+
+}
 
 int multiply(int adim1, int adim2, double * a, int bdim1,int bdim2, double * b, double ** c){
-    if(adim2!=bdim1){
-        return -1;
-    }
-    // #pragma omp parallel for collapse(2)
-
-        for(int i1=0;i1<adim1;i1++){
-            for(int j1=0;j1<bdim2;j1++){
-                double temp=0.0;
-                for(int i2=0;i2<adim2;i2++){
-                    temp += (a[adim2*i1+i2])*(b[bdim2*i2+ j1]);
-                }
-                (*c)[bdim2*i1+j1]=temp;
-            }
+    if(USEGPU==0){
+        if(adim2!=bdim1){
+            return -1;
         }
-    return 0;
+        // #pragma omp parallel for collapse(2)
+
+            for(int i1=0;i1<adim1;i1++){
+                for(int j1=0;j1<bdim2;j1++){
+                    double temp=0.0;
+                    for(int i2=0;i2<adim2;i2++){
+                        temp += (a[adim2*i1+i2])*(b[bdim2*i2+ j1]);
+                    }
+                    (*c)[bdim2*i1+j1]=temp;
+                }
+            }
+        return 0;        
+    }else{
+        if(adim2!=bdim1){
+            return -1;
+        }
+        int m = adim1;
+        int n = adim2;
+        int k = bdim2;
+        // printf("matrix mul 1\n");
+        // printMatrix(m,n,&a);
+        // printMatrix(n,k,&b);
+        // printMatrix(m,k,c);
+
+        double *d_a, *d_b, *d_c;
+        // double * cbackup = (double *)malloc(sizeof(double)* m*k);
+     //    cudaMallocHost((void **) &a, sizeof(double)*m*n);
+    	// cudaMallocHost((void **) &b, sizeof(double)*n*k);
+     //    cudaMallocHost((void **) c, sizeof(double)*m*k);
+        // cudaMallocHost((void **) &h_cc, sizeof(int)*m*k);
+        cudaMalloc((void **) &d_a, sizeof(double)*m*n);
+        cudaMalloc((void **) &d_b, sizeof(double)*n*k);
+        cudaMalloc((void **) &d_c, sizeof(double)*m*k);
+        cudaMemcpy(d_a, a, sizeof(double)*m*n, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_b, b, sizeof(double)*n*k, cudaMemcpyHostToDevice);
+        dim3 dimGrid((k + BLOCK_SIZE - 1) / BLOCK_SIZE, (m + BLOCK_SIZE - 1) / BLOCK_SIZE);
+        dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
+        gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k); 
+        cudaMemcpy((*c), d_c, sizeof(double)*m*k, cudaMemcpyDeviceToHost);
+        cudaThreadSynchronize();
+        cudaFree(d_a);
+        cudaFree(d_b);
+        cudaFree(d_c);
+        // for(int i=0;i<m*k;i++){
+        // 	(*c)[i]=cbackup[i];
+        // }
+        // free(cbackup);
+        // cudaFreeHost(a);
+        // cudaFreeHost(b);
+        // cudaFreeHost(*c);
+        // cudaFreeHost(h_cc);
+        // printf("matrix mul 2\n");
+        // printMatrix(m,n,&a);
+        // printMatrix(n,k,&b);
+        // printMatrix(m,k,c);
+        return 0;
+    }
+
 }
 int subtract(int adim1, int adim2, double * a, int bdim1,int bdim2, double * b, double ** c){
     if(adim1!=bdim1 || adim2!=bdim2){

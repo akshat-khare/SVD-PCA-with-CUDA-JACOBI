@@ -20,10 +20,10 @@
 from random import uniform
 from sklearn.preprocessing import StandardScaler
 
-M = 1000            # number of rows (samples) in input matrix D
-N = 300             # number of columns (features) in input matrix
-lrange = -100000    # lrange <= element of matrix
-urange = 100000     # element of matrix <= urange
+M = 3           # number of rows (samples) in input matrix D
+N = 2             # number of columns (features) in input matrix
+lrange = -20    # lrange <= element of matrix
+urange = 20     # element of matrix <= urange
 
 # generate the matrix
 D = []
