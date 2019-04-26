@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include "jacobi.h"
 #include "lab3_cuda.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+
+#define BLOCK_SIZE 16
 
 int debug =1;
 int debug2 = 0;
