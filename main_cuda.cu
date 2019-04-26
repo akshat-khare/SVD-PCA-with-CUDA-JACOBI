@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
 		and outputs the results
 	*/
 	write_result(M, N, D, U, SIGMA, V_T, SIGMAm, SIGMAn, K, D_HAT, computation_time);
-	printf("computation time is %f",computation_time);
+	// printf("computation time is %f",computation_time);
 
 	return 0;
 }
