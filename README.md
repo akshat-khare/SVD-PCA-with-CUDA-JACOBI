@@ -1,6 +1,9 @@
 # col380_lab3_suite
 Problem Statement: Implement Principal Component Analysis with Singular Vector Decomposition in CUDA
 
+nvcc main_cuda.cu lab3_cuda.cu lab3_io.cu jacobi.cu -o pca
+
+
 ## Directories and files
 `testcase/`: contains python script `gen_testcase.py` for sample testcase generation  
 `lab3_io.h` and `lab3_io.cu`: functions to read matrix from file and check the correctness of the result  

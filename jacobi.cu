@@ -92,48 +92,61 @@ void update(int k, double t) {
 
 void rotate(int k, int l, int i, int j, double c, double s,
             bool eigenvectors){
-    double** mat1;
-    double** mat2;
-    double** mat3;
+    // double** mat1;
+    // double** mat2;
+    // double** mat3;
 
-    mat1 = (double**)malloc(sizeof(double *)*2);
-    mat1[0] = (double*)malloc(sizeof(double)*2);
-    mat1[1] = (double*)malloc(sizeof(double)*2);
-    mat1[0][0] = c; mat1[0][1] = -s;
-    mat1[1][0] = s; mat1[1][1] = c;
+    // mat1 = (double**)malloc(sizeof(double *)*2);
+    // mat1[0] = (double*)malloc(sizeof(double)*2);
+    // mat1[1] = (double*)malloc(sizeof(double)*2);
+    // mat1[0][0] = c; mat1[0][1] = -s;
+    // mat1[1][0] = s; mat1[1][1] = c;
 
-    mat2 = (double**)malloc(sizeof(double *)*2);
-    mat2[0] = (double*)malloc(sizeof(double)*1);
-    mat2[1] = (double*)malloc(sizeof(double)*1);
-    if (eigenvectors){
-        mat2[0][0] = E[i][k];
-        mat2[1][0] = E[i][l];
+    // mat2 = (double**)malloc(sizeof(double *)*2);
+    // mat2[0] = (double*)malloc(sizeof(double)*1);
+    // mat2[1] = (double*)malloc(sizeof(double)*1);
+    // if (eigenvectors){
+    //     mat2[0][0] = E[i][k];
+    //     mat2[1][0] = E[i][l];
+    // }
+    // else {
+    //     mat2[0][0] = S[k][l];
+    //     mat2[1][0] = S[i][j];
+    // }
+
+    // mat3 = mat_mul(mat1, 2, 2, mat2, 2, 1);
+
+    // if (eigenvectors){
+    //     E[i][k] = mat3[0][0];
+    //     E[i][l] = mat3[1][0];
+    // }
+    // else{
+    //     S[k][l] = mat3[0][0];
+    //     S[i][j] = mat3[1][0];
+    // }
+
+    // free(mat1[0]);
+    // free(mat1[1]);
+    // free(mat1);
+    // free(mat2[0]);
+    // free(mat2[1]);
+    // free(mat2);
+    // free(mat3[0]);
+    // free(mat3[1]);
+    // free(mat3);
+    double mat0=0;
+    double mat1=0;
+    if(eigenvectors){
+        mat0 = c * E[i][k] - s * E[i][l];
+        mat1 = s * E[i][k] + c * E[i][l];
+        E[i][k] = mat0;
+        E[i][l] = mat1;
+    }else{
+        mat0 = c * S[k][l] - s * S[i][j];
+        mat1 = s * S[k][l] + c * S[i][j];
+        S[k][l] = mat0;
+        S[i][j] = mat1;
     }
-    else {
-        mat2[0][0] = S[k][l];
-        mat2[1][0] = S[i][j];
-    }
-
-    mat3 = mat_mul(mat1, 2, 2, mat2, 2, 1);
-
-    if (eigenvectors){
-        E[i][k] = mat3[0][0];
-        E[i][l] = mat3[1][0];
-    }
-    else{
-        S[k][l] = mat3[0][0];
-        S[i][j] = mat3[1][0];
-    }
-
-    free(mat1[0]);
-    free(mat1[1]);
-    free(mat1);
-    free(mat2[0]);
-    free(mat2[1]);
-    free(mat2);
-    free(mat3[0]);
-    free(mat3[1]);
-    free(mat3);
 }
 
 void print_matrix(double** A, int Am, int An) {

@@ -4,14 +4,18 @@
 #include <stdio.h>
 #include "jacobi.h"
 #include "lab3_cuda.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
 
-#define BLOCK_SIZE 16
+
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <assert.h>
+
+// #define BLOCK_SIZE 16
+
+
 
 int debug =1;
-int debug2 = 0;
+int debug2 = 1;
 int labid=3;
 // int NUMTHREADS= 1;
 int maxloops= 100000;
@@ -69,6 +73,29 @@ void printMatrixint(int m, int n, int ** mat){
     }
     printf("print over\n");
 }
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+
+#define BLOCK_SIZE 16
+
+__global__ void gpu_matrix_mult(double *a,double *b, double *c, int m, int n, int k)
+{ 
+    int row = blockIdx.y * blockDim.y + threadIdx.y; 
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    double sum = 0;
+    if( col < k && row < m) 
+    {
+        for(int i = 0; i < n; i++) 
+        {
+            sum += a[row * n + i] * b[i * k + col];
+        }
+        c[row * k + col] = sum;
+    }
+} 
+
 int multiply(int adim1, int adim2, double * a, int bdim1,int bdim2, double * b, double ** c){
     if(adim2!=bdim1){
         return -1;
